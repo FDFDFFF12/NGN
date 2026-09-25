@@ -1,0 +1,38 @@
+<h2>Estado del Servidor - PS4</h2>
+<div id="console"></div>
+
+<script>
+(function () {
+    var con = document.getElementById("console");
+
+    function print(msg, cls) {
+        if (!con) return;
+        var span = document.createElement("span");
+        if (cls) span.className = cls;
+        span.textContent = msg + "\n";
+        con.appendChild(span);
+    }
+
+    // Mensaje de inicio
+    print("¡Hola! Página cargada en la consola.", "ok");
+
+    // Lectura del navegador de PS4
+    var key = null;
+    var m = /PlayStation\s+4[\/ ](\d+)\.(\d+)/.exec(navigator.userAgent);
+    
+    if (m) {
+        var ms = parseInt(m[2], 16).toString(16);
+        if (ms.length < 2) ms = "0" + ms;
+        key = m[1] + "." + ms;
+        print("Consola detectada: PS4 (Firmware " + key + ")", "ok");
+    } else {
+        print("Dispositivo: Navegador estándar / PC", "warn");
+    }
+
+    // Verificación de caché offline
+    var ac = window.applicationCache;
+    if (ac) {
+        if (ac.status === ac.IDLE) {
+            print("Estado de la caché: Listo para uso offline", "ok");
+        } else if (ac.status === ac.UNCACHED) {
+            print("Estado de la caché: No guardado en memoria", "warn");
